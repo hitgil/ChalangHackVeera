@@ -23,6 +23,7 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController searchController = TextEditingController();
   bool isLoading = false;
   Map<String, dynamic>? searchResults;
+  String? responseId;
 
   @override
   void initState() {
@@ -65,7 +66,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
     if (response.statusCode == 200) {
       setState(() {
-        searchResults = json.decode(response.body);
+        final responseData = json.decode(response.body);
+        searchResults = responseData;
+        responseId = responseData['id'];
         isLoading = false;
       });
     } else {
@@ -89,10 +92,24 @@ class _SearchScreenState extends State<SearchScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.purple,
-                  Colors.purple[100] ?? Colors.white,
+                  Colors.white,
+                  // Colors.white[100] ?? Colors.white,
                 ],
-                stops: [0.1, 0.9], // Halfway split
+                // stops: [0,1 ], // Halfway split
+              ),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            // width: MediaQuery.of(context).size.width,
+            width: 800,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.indigo,
+                ],
               ),
             ),
           ),
@@ -134,7 +151,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       onPressed: () async {
                         await searchQuery(searchController.text);
                       },
-                      icon: Icon(Icons.search),
+                      icon: Icon(Icons.search, color: Colors.grey),
                     ),
                     suffixIcon: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -155,21 +172,49 @@ class _SearchScreenState extends State<SearchScreen> {
                         const SizedBox(
                           width: 10,
                         ),
-                        PopupMenuButton(
-                          icon: const Icon(Icons.more_vert_sharp,
-                              color: Colors.grey),
-                          itemBuilder: (context) => [
-                            PopupMenuItem<int>(
-                              value: 1,
-                              child: Text('Option 1'),
+                        if (!isLoading &&
+                            searchResults !=
+                                null) // Show share icon only if content is loaded
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Share"),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ElevatedButton.icon(
+                                          onPressed: () {
+                                            print(responseId);
+                                            Navigator.pop(context);
+                                          },
+                                          icon: Icon(Icons.content_copy),
+                                          label: Text("Copy to Clipboard"),
+                                        ),
+                                        ElevatedButton.icon(
+                                          onPressed: () {
+                                            print(responseId);
+                                            Navigator.pop(context);
+                                          },
+                                          icon: Icon(Icons.share),
+                                          label: Text("Copy to WhatsApp"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              Icons.share,
+                              color: Colors.grey,
                             ),
-                            PopupMenuItem<int>(
-                              value: 2,
-                              child: Text('Option 2'),
-                            ),
-                          ],
-                          onSelected: (value) {},
-                        )
+                          ),
+                        const SizedBox(
+                          width: 10,
+                        ),
                       ],
                     ),
                   ),
@@ -186,7 +231,9 @@ class _SearchScreenState extends State<SearchScreen> {
                               ListTile(
                                 title: Text(
                                   searchResults!['results']['generatedTitle'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.ubuntu(
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text(
                                   searchResults!['results']['generatedBrief'],
@@ -201,8 +248,18 @@ class _SearchScreenState extends State<SearchScreen> {
                               for (var link in searchResults!['results']
                                   ['linksToShow'])
                                 ListTile(
-                                  title: Text(link['title']),
-                                  subtitle: Text(link['whyRelevant']),
+                                  title: Text(
+                                    link['title'],
+                                    style: GoogleFonts.ubuntuMono(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(
+                                    link['whyRelevant'],
+                                    style: GoogleFonts.ubuntu(
+                                      fontSize: 10.0,
+                                    ),
+                                  ),
                                   onTap: () {
                                     // Handle link tap
                                   },
@@ -216,34 +273,5 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       ),
     );
-  }
-
-  void _showSnackbar(String message) {
-    final snackBar = SnackBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      content: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0xFF90A4AE),
-            )
-          ],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          message,
-          style: GoogleFonts.ubuntu(
-            color: Colors.grey[800],
-            letterSpacing: -1,
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
-          ),
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
