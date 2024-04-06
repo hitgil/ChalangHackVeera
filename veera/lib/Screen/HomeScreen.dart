@@ -115,9 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     prefixIcon: IconButton(
                       onPressed: () {
                         print(searchController.text);
-                        // Navigator.popAndPushNamed(context, '/search',
-                        //     arguments: searchController.text);
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(

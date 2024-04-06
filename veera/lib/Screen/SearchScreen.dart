@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 
 class SearchScreen extends StatefulWidget {
   final String initialSearchText;
@@ -24,6 +25,7 @@ class _SearchScreenState extends State<SearchScreen> {
   bool isLoading = false;
   Map<String, dynamic>? searchResults;
   String? responseId;
+  String? queryParamId;
 
   @override
   void initState() {
@@ -33,6 +35,8 @@ class _SearchScreenState extends State<SearchScreen> {
     });
     searchController.text = widget.initialSearchText;
     searchQuery(widget.initialSearchText);
+    final id = Uri.base.queryParameters["id"];
+    print(id);
   }
 
   @override
@@ -46,6 +50,14 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       hasFocus = focus.hasFocus;
     });
+  }
+
+  Future<void> sharedQuery() async {
+    if (responseId != null) {
+      final String url = 'http://localhost:3000/?id=$responseId';
+
+      Clipboard.setData(ClipboardData(text: url));
+    }
   }
 
   Future<void> searchQuery(String query) async {
@@ -186,20 +198,20 @@ class _SearchScreenState extends State<SearchScreen> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         ElevatedButton.icon(
-                                          onPressed: () {
-                                            print(responseId);
+                                          onPressed: () async {
+                                            await sharedQuery();
                                             Navigator.pop(context);
                                           },
                                           icon: Icon(Icons.content_copy),
                                           label: Text("Copy to Clipboard"),
                                         ),
                                         ElevatedButton.icon(
-                                          onPressed: () {
-                                            print(responseId);
+                                          onPressed: () async {
+                                            await sharedQuery();
                                             Navigator.pop(context);
                                           },
                                           icon: Icon(Icons.share),
-                                          label: Text("Copy to WhatsApp"),
+                                          label: Text("Share to WhatsApp"),
                                         ),
                                       ],
                                     ),
@@ -251,8 +263,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                   title: Text(
                                     link['title'],
                                     style: GoogleFonts.ubuntuMono(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
+                                      color: const Color.fromARGB(255, 51, 22, 56),
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   subtitle: Text(
                                     link['whyRelevant'],
@@ -264,6 +278,27 @@ class _SearchScreenState extends State<SearchScreen> {
                                     // Handle link tap
                                   },
                                 ),
+                              Divider(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      // Handle thumbs up action
+                                    },
+                                    icon: Icon(Icons.thumb_up),
+                                    color: Colors.purple[200],
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      // Handle thumbs down action
+                                    },
+                                    icon: Icon(Icons.thumb_down),
+                                    color: Colors.purple[200],
+                                  ),
+                                ],
+                              ),
                             ],
                           )
                         : SizedBox(),
