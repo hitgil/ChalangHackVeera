@@ -7,7 +7,10 @@ class SearchScreen extends StatefulWidget {
   final String initialSearchText;
   final TextEditingController searchController;
 
-  const SearchScreen({Key? key, required this.initialSearchText, required this.searchController})
+  const SearchScreen(
+      {Key? key,
+      required this.initialSearchText,
+      required this.searchController})
       : super(key: key);
 
   @override
@@ -27,7 +30,9 @@ class _SearchScreenState extends State<SearchScreen> {
     focus.addListener(() {
       onFocusChange();
     });
-    searchController.text = widget.initialSearchText;  }
+    searchController.text = widget.initialSearchText;
+    searchQuery(widget.initialSearchText);
+  }
 
   @override
   void dispose() {
@@ -93,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           Positioned(
             top: 10.0,
-            left: 10,
+            left: 18,
             right: 0,
             child: Text(
               'veera',
@@ -124,7 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: const Color.fromARGB(255, 234, 212, 238),
                     prefixIcon: IconButton(
                       onPressed: () async {
                         await searchQuery(searchController.text);
