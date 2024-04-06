@@ -1,16 +1,17 @@
-# veera
+# My Awesome Flutter App
 
-A new Flutter project.
+This is a Flutter application that utilizes AI to provide curated search results.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Search functionality with AI-powered curated results
+- Sharing of search results via copy to clipboard and share to WhatsApp
+- Interactive UI with shimmer effect during loading
+- Thumb up/down actions for search results
 
-A few resources to get you started if this is your first Flutter project:
+## Dependencies
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [http](https://pub.dev/packages/http) - for making HTTP requests
+- [google_fonts](https://pub.dev/packages/google_fonts) - for using Google Fonts in the app
+- [shimmer](https://pub.dev/packages/shimmer) - for shimmer effect during loading
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

@@ -1,8 +1,11 @@
+
 import 'dart:convert';
+import 'dart:math'; // Import Random for generating random index
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import 'package:shimmer/shimmer.dart'; // Import shimmer package
 
 class SearchScreen extends StatefulWidget {
   final String initialSearchText;
@@ -26,6 +29,20 @@ class _SearchScreenState extends State<SearchScreen> {
   Map<String, dynamic>? searchResults;
   String? responseId;
   String? queryParamId;
+
+  final List<String> loadingMessages = [
+    "Hang tight! Our AI wizards are conjuring up the perfect results just for you!",
+    "Brace yourself for the magic! Our AI is weaving its spell to deliver curated treasures!",
+    "Buckle up! Our AI engines are revving up to bring you the most delightful discoveries!",
+    "Hold on to your hats! Our AI is on a mission to sprinkle some joy into your search results!",
+    "Prepare to be dazzled! Our AI magicians are orchestrating a spectacle of curated wonders!",
+    "Get ready to be amazed! Our AI is painting a canvas of curated delights just for you!",
+    "Stay tuned! Our AI maestros are composing a symphony of curated brilliance!",
+    "Excitement is in the air! Our AI is brewing up a storm of curated awesomeness!",
+    "Keep the faith! Our AI is working its magic to uncover the hidden gems you seek!",
+    "Anticipation building! Our AI is on a quest to deliver the most enchanting results!",
+    "Hold onto your socks! Our AI is about to knock them off with curated excellence!"
+  ];
 
   @override
   void initState() {
@@ -234,9 +251,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               Expanded(
                 child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
+                    ? _buildLoadingWidget() // Show shimmer effect while loading
                     : searchResults != null
                         ? ListView(
                             children: [
@@ -263,7 +278,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   title: Text(
                                     link['title'],
                                     style: GoogleFonts.ubuntuMono(
-                                      color: const Color.fromARGB(255, 51, 22, 56),
+                                      color:
+                                          const Color.fromARGB(255, 51, 22, 56),
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -307,6 +323,27 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  // Widget to show shimmer effect while loading
+  Widget _buildLoadingWidget() {
+    final Random random = Random();
+    final int randomIndex = random.nextInt(loadingMessages.length);
+    final String loadingMessage = loadingMessages[randomIndex];
+
+    return ListView.builder(
+      itemCount: 5, // Number of shimmer lines
+      itemBuilder: (BuildContext context, int index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: ListTile(
+            title: Text(loadingMessage),
+            subtitle: Text(''),
+          ),
+        );
+      },
     );
   }
 }
