@@ -1,4 +1,4 @@
-# My Awesome Flutter App
+# Smart Search Speeder
 
 This is a Flutter application that utilizes AI to provide curated search results.
 
