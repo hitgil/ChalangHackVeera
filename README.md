@@ -1,6 +1,5 @@
-# My Awesome Flutter App
-
-This is a Flutter application that utilizes AI to provide curated search results.
+# Veera
+This a revolutionary search tool that leverages AI to empower users to not just find information, but to explore, understand, and be inspired by the vast knowledge available on the internet.
 
 ## Features
 
@@ -15,3 +14,12 @@ This is a Flutter application that utilizes AI to provide curated search results
 - [google_fonts](https://pub.dev/packages/google_fonts) - for using Google Fonts in the app
 - [shimmer](https://pub.dev/packages/shimmer) - for shimmer effect during loading
 
+![alt text](<Screenshot from 2024-04-06 18-32-39.png>)
+
+![alt text](<Screenshot from 2024-04-06 18-34-21.png>)
+
+![alt text](<Screenshot from 2024-04-06 18-36-19.png>)
+
+![alt text](<Screenshot from 2024-04-06 18-36-28.png>)
+
+![alt text](<Screenshot from 2024-04-06 18-38-16.png>)
